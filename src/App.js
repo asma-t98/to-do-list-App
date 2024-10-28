@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import TodoForm from './components/TodoForm';
+import TodoList from './components/TodoList';
 import './App.css';
 
+
 function App() {
+  const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+
+  const addTask = (task) => {
+    setTasks([...tasks, task]); 
+  };
+
+  const toggleTaskCompletion = (index) => {
+    const task = tasks[index];
+    setCompletedTasks([...completedTasks, task]); 
+    const newTasks = tasks.filter((_, i) => i !== index); 
+    setTasks(newTasks); 
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Asma To-Do List</h1>
+      <TodoForm addTask={addTask} /> 
+
+      <TodoList tasks={tasks} toggleTaskCompletion={toggleTaskCompletion} />
+      <h2>completedTasks</h2>
+      <ul>
+        {completedTasks.map((task,index) => (
+          <li key={index}>{task}</li>
+        ))}
+      </ul>
+
+    
     </div>
   );
 }
